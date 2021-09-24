@@ -1,3 +1,4 @@
+const model = require('./mysql.js')
 // 引入express框架
 const express = require('express')
 const app = express()
@@ -26,14 +27,19 @@ app.get('/', (req, res) => {
   res.send('<p style="color:red">服务已启动</p>')
 })
 
-app.get('/api/list', (req, res) => {
-  res.json({
-    code: 200,
-    message: '成功',
-    data: {
-      list: []
-    }
-  })
+app.get('/api/list', async (req, res) => {
+  try {
+    const list = await model.queryList()
+    res.json({
+      code: 200,
+      message: '成功',
+      data: {
+        list: list
+      }
+    })
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 // 监听端口
